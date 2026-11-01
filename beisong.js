@@ -276,15 +276,30 @@
       }
     });
 
-    // 手机上滑翻面
-    var y0 = null;
+    // 手机上滑翻面（必须「没有在滚动」才算手势，否则往下滑页面会误判成翻面/下一张）
+    var y0 = null, s0 = 0, p0 = 0, moved = 0;
     var pane = $('#pane');
-    pane.addEventListener('touchstart', function (e) { y0 = e.touches[0].clientY; }, { passive: true });
+    function scrollTopNow() {
+      return (window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0);
+    }
+    pane.addEventListener('touchstart', function (e) {
+      if (e.target && /^(BUTTON|A|INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) { y0 = null; return; }
+      y0 = e.touches[0].clientY;
+      s0 = scrollTopNow();
+      p0 = pane.scrollTop || 0;
+      moved = 0;
+    }, { passive: true });
+    pane.addEventListener('touchmove', function (e) {
+      var dy = e.changedTouches && e.changedTouches[0] ? (e.touches[0].clientY - y0) : 0;
+      if (Math.abs(dy) > 8) moved = 1;
+    }, { passive: true });
     pane.addEventListener('touchend', function (e) {
       if (y0 === null) return;
       var dy = e.changedTouches[0].clientY - y0;
+      var scrolled = Math.abs(scrollTopNow() - s0) > 4 || Math.abs((pane.scrollTop || 0) - p0) > 4;
       y0 = null;
-      if (dy < -40) { if (!shown) reveal(); else grade(2); }
+      if (scrolled || moved) return;          // 手指在滑页面，不是翻面手势
+      if (dy < -70) { if (!shown) reveal(); else grade(2); }
     }, { passive: true });
   }
 
