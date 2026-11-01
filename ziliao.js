@@ -102,7 +102,7 @@
     $('#volchips').innerHTML = h;
     var done = data.vols.filter(function (v) { return state.read[v.id]; }).length;
     $('#bar i').style.width = Math.round(done / data.vols.length * 100) + '%';
-    $('#sub').textContent = '6 卷 · ' + data.total_blocks + ' 段 · 已读 ' + done + '/6';
+    $('#sub').textContent = data.vols.length + ' 卷 · ' + data.total_blocks + ' 段 · 已读 ' + done + '/' + data.vols.length;
   }
 
   /* ---------- 正文 ---------- */
