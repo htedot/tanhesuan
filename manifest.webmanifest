@@ -1,0 +1,63 @@
+{
+  "id": "./",
+  "name": "碳核算刷题",
+  "short_name": "碳核算刷题",
+  "description": "2026年江苏省碳排放核算员职业技能大赛理论知识题库刷题（共 1050 题）",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "portrait",
+  "background_color": "#f2f5f6",
+  "theme_color": "#0f766e",
+  "lang": "zh-CN",
+  "categories": [
+    "education",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "实操演练",
+      "short_name": "实操",
+      "url": "./exam.html"
+    },
+    {
+      "name": "机考模拟",
+      "short_name": "机考",
+      "url": "./kaoshi.html"
+    },
+    {
+      "name": "资料库",
+      "short_name": "资料",
+      "url": "./ziliao.html"
+    },
+    {
+      "name": "背诵",
+      "short_name": "背诵",
+      "url": "./beisong.html"
+    }
+  ]
+}

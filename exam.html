@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-font="md">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<title>实操考场 · 碳核算</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  html,body{overflow-x:hidden}
+  body{padding-bottom:104px}
+  .hd{display:flex;align-items:center;gap:10px;padding:14px 14px 6px}
+  .hd a.back{width:44px;height:44px;flex:0 0 44px;border-radius:12px;background:var(--pri-soft);
+    color:var(--pri);display:flex;align-items:center;justify-content:center;font-size:20px;
+    text-decoration:none;font-weight:700}
+  .hd .tt{font-size:calc(var(--fs) + 2px);font-weight:800;line-height:1.25}
+  .hd .ts{font-size:calc(var(--fs) - 3px);color:var(--tx2);margin-top:2px}
+
+  /* 首页 */
+  .cardx{margin:10px 12px;padding:16px;border-radius:16px;background:var(--card);box-shadow:var(--shadow)}
+  .cardx h2{margin:0 0 6px;font-size:calc(var(--fs) + 1px)}
+  .cardx p{margin:0;color:var(--tx2);font-size:calc(var(--fs) - 2px);line-height:1.65}
+  .bigbtn{display:block;width:100%;margin:10px 0 0;padding:15px;border:0;border-radius:14px;
+    font:inherit;font-size:calc(var(--fs) + 1px);font-weight:800;cursor:pointer;background:var(--pri);color:#fff}
+  .bigbtn.ghost{background:var(--pri-soft);color:var(--pri)}
+  .bigbtn:disabled{opacity:.5}
+  .lastline{margin-top:12px;font-size:calc(var(--fs) - 3px);color:var(--tx2)}
+  .lastline b{color:var(--tx)}
+
+  /* 考场须知 */
+  .brief{margin:10px 12px;padding:16px;border-radius:16px;background:var(--card);box-shadow:var(--shadow)}
+  .brief h3{margin:0 0 10px;font-size:calc(var(--fs) + 1px)}
+  .brief li{font-size:calc(var(--fs) - 2px);line-height:1.8;color:var(--tx2)}
+  .brief li b{color:var(--tx)}
+
+  /* 答题页 */
+  .bar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:8px;
+    padding:8px 10px;background:var(--bg);border-bottom:1px solid var(--line)}
+  .bar .no{font-size:calc(var(--fs) - 2px);font-weight:800;color:var(--tx)}
+  .bar .tm{font-variant-numeric:tabular-nums;font-weight:800;color:var(--pri);font-size:calc(var(--fs) - 1px)}
+  .bar .tm.warn{color:var(--bad)}
+  .bar .sp{flex:1}
+  .bar button{border:0;background:var(--pri-soft);color:var(--pri);font:inherit;font-weight:700;
+    font-size:calc(var(--fs) - 3px);padding:0 12px;height:44px;border-radius:10px;cursor:pointer}
+  .qwrap{margin:10px 12px}
+  .qhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .qhead .qn{font-size:calc(var(--fs) + 1px);font-weight:800}
+  .qhead .qp{color:var(--pri);font-weight:800;font-size:calc(var(--fs) - 2px);white-space:nowrap}
+  .stem{margin-top:6px;font-size:calc(var(--fs) - 1px);line-height:1.75;color:var(--tx)}
+  .sub{margin-top:14px}
+  .sub .sa{font-size:calc(var(--fs) - 2px);font-weight:700;line-height:1.65}
+  .sub .sa em{font-style:normal;color:var(--pri);font-weight:800;margin-right:4px}
+  textarea.ans{width:100%;box-sizing:border-box;margin-top:8px;padding:12px;border-radius:12px;
+    border:1.5px solid var(--line);background:var(--card);color:var(--tx);font:inherit;
+    font-size:calc(var(--fs) - 1px);line-height:1.7;resize:vertical;min-height:84px}
+  textarea.ans:focus, input.cell:focus{outline:none;border-color:var(--pri)}
+  textarea.ans, input.cell{scroll-margin-bottom:120px}
+  .cellrow{display:flex;align-items:center;gap:8px;margin-top:9px}
+  .cellrow label{flex:1;font-size:calc(var(--fs) - 2px);color:var(--tx2);line-height:1.45}
+  input.cell{width:132px;flex:0 0 132px;padding:10px;border-radius:10px;border:1.5px solid var(--line);
+    background:var(--card);color:var(--tx);font:inherit;font-variant-numeric:tabular-nums;text-align:right}
+  .cellrow .u{font-size:calc(var(--fs) - 4px);color:var(--tx2)}
+
+  /* 资料 */
+  .inline{margin-top:12px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+  .inline summary{padding:11px 12px;font-weight:700;font-size:calc(var(--fs) - 2px);color:var(--pri);
+    cursor:pointer;list-style:none;display:block;position:relative;padding-right:34px}
+  .inline summary::-webkit-details-marker{display:none}
+  .inline summary::after{content:'＋';position:absolute;right:12px;top:9px;color:var(--tx2)}
+  .inline[open] summary::after{content:'－'}
+  .dtab{width:100%;border-collapse:collapse;font-size:calc(var(--fs) - 3px)}
+  .dtab th,.dtab td{border-top:1px solid var(--line);padding:7px 9px;text-align:left;line-height:1.5}
+  .dtab th{background:var(--pri-soft);color:var(--pri);font-weight:700;white-space:nowrap}
+  .dtab td{font-variant-numeric:tabular-nums}
+  .dnote{padding:8px 12px;color:var(--tx2);font-size:calc(var(--fs) - 4px);line-height:1.55}
+  .keybox{margin-top:10px;border:1px dashed var(--line);border-radius:12px;background:var(--bg)}
+  .keybox .kv{padding:7px 12px;border-top:1px dashed var(--line);font-size:calc(var(--fs) - 3px);line-height:1.6}
+  .keybox .kv:first-of-type{border-top:0}
+
+  /* 底部操作 */
+  .foot{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;gap:8px;padding:10px 12px;
+    background:var(--bg);border-top:1px solid var(--line)}
+  .foot button{flex:1;height:46px;border:0;border-radius:12px;font:inherit;font-weight:800;
+    font-size:calc(var(--fs) - 1px);cursor:pointer}
+  .foot .go{background:var(--pri-soft);color:var(--pri)}
+  .foot .sub2{background:var(--pri);color:#fff;flex:0 0 96px}
+
+  /* 浮层 */
+  .xmask{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.4);display:none}
+  .xmask.on{display:block}
+  .xsheet{position:fixed;left:0;right:0;bottom:0;z-index:61;max-height:76vh;overflow:auto;
+    background:var(--card);border-radius:18px 18px 0 0;display:none;padding-bottom:16px}
+  .xsheet.on{display:block}
+  .xsheet .st{position:sticky;top:0;display:flex;gap:6px;padding:10px 12px;background:var(--card);
+    border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .xsheet .st button{border:0;background:var(--pri-soft);color:var(--pri);font:inherit;font-weight:700;
+    font-size:calc(var(--fs) - 3px);height:44px;padding:0 12px;border-radius:9px;cursor:pointer}
+  .xsheet .st button.on{background:var(--pri);color:#fff}
+  .xsheet .st .x{margin-left:auto;background:transparent;color:var(--tx2);font-size:18px}
+  .gridcard{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px}
+  .gridcard button{height:52px;border:0;border-radius:12px;background:var(--line);color:var(--tx2);
+    font:inherit;font-weight:800;font-size:calc(var(--fs) - 1px);cursor:pointer}
+  .gridcard button.done{background:var(--ok-soft);color:var(--ok)}
+  .gridcard button.cur{outline:2px solid var(--pri);color:var(--pri)}
+
+  /* 计算器 */
+  .calcbtn{position:fixed;right:14px;bottom:76px;z-index:40;width:52px;height:52px;border:0;border-radius:50%;
+    background:var(--pri);color:#fff;font:inherit;font-weight:800;font-size:15px;
+    box-shadow:0 6px 18px rgba(15,118,110,.35);cursor:pointer}
+  .calc{position:fixed;z-index:70;right:14px;bottom:140px;width:268px;max-width:calc(100vw - 28px);
+    background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 34px rgba(0,0,0,.22);
+    display:none;overflow:hidden}
+  .calc.on{display:block}
+  .calc .cd{padding:12px;text-align:right;font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;
+    border-bottom:1px solid var(--line);min-height:54px;word-break:break-all}
+  .calc .ch{padding:6px 12px;max-height:64px;overflow:auto;font-size:11px;color:var(--tx2);
+    border-bottom:1px solid var(--line);display:none}
+  .calc .ch.on{display:block}
+  .calc .ks{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:10px}
+  .calc .ks button{height:42px;border:0;border-radius:10px;background:var(--bg);color:var(--tx);
+    font:inherit;font-weight:700;font-size:15px;cursor:pointer}
+  .calc .ks button.op{background:var(--pri-soft);color:var(--pri)}
+  .calc .ks button.eq{background:var(--pri);color:#fff}
+  .calc .ks button.w{grid-column:span 2}
+  .calc .fill{width:100%;padding:11px;border:0;background:var(--ok-soft);color:var(--ok);
+    font:inherit;font-weight:800;font-size:13px;cursor:pointer}
+
+  /* 成绩与精讲 */
+  .score{margin:10px 12px;padding:18px;border-radius:16px;background:var(--card);box-shadow:var(--shadow);text-align:center}
+  .score .n{font-size:44px;font-weight:800;color:var(--pri);font-variant-numeric:tabular-nums}
+  .score .n small{font-size:16px;color:var(--tx2);font-weight:600}
+  .score .br{display:flex;gap:10px;margin-top:12px;text-align:left}
+  .score .br div{flex:1;padding:10px;border-radius:12px;background:var(--bg);font-size:calc(var(--fs) - 3px);color:var(--tx2)}
+  .score .br b{display:block;font-size:calc(var(--fs) + 1px);color:var(--tx);margin-top:2px}
+  .rowq{margin:8px 12px;padding:12px 14px;border-radius:12px;background:var(--card);box-shadow:var(--shadow);
+    display:flex;align-items:center;gap:10px;cursor:pointer}
+  .rowq .t{flex:1;font-size:calc(var(--fs) - 1px);font-weight:700}
+  .rowq .s{font-weight:800;color:var(--pri);font-variant-numeric:tabular-nums}
+  .rowq .s.low{color:var(--bad)}
+  .review{margin:10px 12px;padding:14px;border-radius:14px;background:var(--card);box-shadow:var(--shadow)}
+  .review h4{margin:0 0 8px;font-size:calc(var(--fs) - 1px)}
+  .kv{padding:8px 0;border-top:1px dashed var(--line);font-size:calc(var(--fs) - 2px);line-height:1.7}
+  .kv:first-of-type{border-top:0}
+  .kv .k{color:var(--tx2);font-size:calc(var(--fs) - 3px)}
+  .hit{color:var(--ok)}
+  .miss{color:var(--bad)}
+  .model{white-space:pre-wrap;font-size:calc(var(--fs) - 2px);line-height:1.8}
+  .tipbox{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--warn-soft);color:#7c4a03;
+    font-size:calc(var(--fs) - 2px);line-height:1.7}
+  .tipbox b{color:#7c4a03}
+  .badge{display:inline-block;padding:1px 7px;border-radius:6px;background:var(--pri-soft);color:var(--pri);
+    font-size:calc(var(--fs) - 4px);font-weight:700;margin-left:6px}
+  .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:99;
+    max-width:82vw;padding:11px 16px;border-radius:12px;background:rgba(20,28,30,.92);
+    color:#fff;font-size:calc(var(--fs) - 2px);text-align:center;display:none}
+  .toast.on{display:block}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="toast" id="toast"></div>
+<script src="exam_core.js"></script>
+<script src="exam.js"></script>
+</body>
+</html>

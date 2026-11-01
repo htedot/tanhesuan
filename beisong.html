@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-font="md">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<title>背诵 · 碳核算</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  body{padding-bottom:28px}
+  html,body{max-width:100%;overflow-x:hidden}
+  .hd{display:flex;align-items:center;gap:10px;padding:16px 14px 8px}
+  .hd a{width:44px;height:44px;flex:0 0 44px;border-radius:12px;background:var(--pri-soft);
+        color:var(--pri);display:flex;align-items:center;justify-content:center;
+        font-size:20px;text-decoration:none;font-weight:700}
+  .hd .tt{font-size:calc(var(--fs) + 3px);font-weight:800;line-height:1.2}
+  .hd .ts{font-size:calc(var(--fs) - 3px);color:var(--tx2);margin-top:2px}
+  .bar{height:6px;border-radius:4px;background:var(--line);overflow:hidden;margin:8px 14px 0}
+  .bar i{display:block;height:100%;background:var(--pri);width:0;transition:width .25s}
+  .stat{display:flex;gap:10px;margin:8px 14px 12px;font-size:calc(var(--fs) - 3px);color:var(--tx2)}
+  .stat b{color:var(--pri)}
+  .card{margin:0 12px 12px;background:var(--card);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+  .card .top{display:flex;justify-content:space-between;align-items:center;gap:8px;
+             padding:9px 13px;background:var(--pri-soft);color:var(--pri);
+             font-size:calc(var(--fs) - 3px);font-weight:700}
+  .card .top .k{background:var(--card);border-radius:8px;padding:2px 7px}
+  .face{padding:16px 15px;font-size:calc(var(--fs) + 1px);line-height:1.75;white-space:pre-wrap;
+        overflow-wrap:anywhere;min-height:150px}
+  .face b{color:var(--pri)}
+  .face .blank{background:var(--warn-soft);color:#7c4a03;border-radius:6px;padding:1px 6px;font-weight:700}
+  .ans{display:none;padding:0 15px 14px;white-space:pre-wrap;overflow-wrap:anywhere;
+       font-size:calc(var(--fs) + 1px);line-height:1.8;color:var(--ok);font-weight:700}
+  .card.open .ans{display:block}
+  .src{display:none;padding:0 15px 14px;font-size:calc(var(--fs) - 3px);color:var(--tx2);line-height:1.6}
+  .card.open .src{display:block}
+  .src .ctx{display:block;margin-top:6px;padding:8px 10px;background:var(--bg);border-radius:10px;
+            white-space:pre-wrap;max-height:190px;overflow:auto}
+  .acts{display:flex;gap:8px;margin:0 12px 12px}
+  .acts .btn{flex:1;padding:12px 0;font-size:calc(var(--fs) - 1px);min-height:48px}
+  .reveal{flex:1.4}
+  .grade{display:none;gap:8px;margin:0 12px 12px}
+  .card.open ~ .grade{display:flex}
+  .grade button{flex:1;border:0;border-radius:12px;padding:13px 0;min-height:50px;font:inherit;
+                font-size:calc(var(--fs) - 1px);font-weight:800;cursor:pointer}
+  .g1{background:var(--bad-soft);color:var(--bad)}
+  .g2{background:var(--warn-soft);color:#7c4a03}
+  .g3{background:var(--ok-soft);color:var(--ok)}
+  .opts{margin:0 12px 12px;background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:10px 12px}
+  .opts .row{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:calc(var(--fs) - 2px)}
+  .opts .row>span{flex:0 0 62px;color:var(--tx2)}
+  .opts .seg{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+  .opts .seg button{border:1.5px solid var(--line);background:var(--card);color:var(--tx2);
+                    font:inherit;font-size:calc(var(--fs) - 3px);font-weight:700;padding:7px 11px;
+                    min-height:38px;border-radius:10px;cursor:pointer}
+  .opts .seg button.on{border-color:var(--pri);color:var(--pri);background:var(--pri-soft)}
+  .done{margin:20px 14px;text-align:center;color:var(--tx2);line-height:1.9;font-size:calc(var(--fs) - 1px)}
+  .done .big{font-size:34px;font-weight:800;color:var(--ok);display:block;margin-bottom:6px}
+  #tts{display:none}
+  .card.open ~ .acts #tts{display:block}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:99;
+         max-width:82vw;padding:10px 15px;border-radius:12px;background:rgba(20,28,30,.92);
+         color:#fff;font-size:calc(var(--fs) - 2px);line-height:1.5;text-align:center}
+</style>
+</head>
+<body>
+<div class="hd">
+  <a href="index.html" aria-label="返回">‹</a>
+  <div>
+    <div class="tt">背诵</div>
+    <div class="ts" id="sub">正在加载…</div>
+  </div>
+</div>
+
+<div class="bar"><i id="prog"></i></div>
+<div class="stat">
+  <span>今日新学 <b id="sNew">0</b>/<span id="sGoal">30</span></span>
+  <span>复习 <b id="sRev">0</b></span>
+  <span>连对 <b id="sStreak">0</b></span>
+  <span id="sLeft"></span>
+</div>
+
+<main id="pane"></main>
+
+<div class="opts" id="opts">
+  <div class="row"><span>范围</span>
+    <div class="seg" id="segVol"></div>
+  </div>
+  <div class="row"><span>每日新卡</span>
+    <div class="seg" id="segGoal">
+      <button data-goal="20">20</button><button data-goal="30" class="on">30</button>
+      <button data-goal="50">50</button><button data-goal="80">80</button>
+    </div>
+  </div>
+  <div class="row"><span>只看</span>
+    <div class="seg" id="segMode">
+      <button data-mode="all" class="on">全部</button><button data-mode="hot">高频</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+<script src="beisong.js"></script>
+</body>
+</html>

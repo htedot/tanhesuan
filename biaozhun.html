@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-font="md">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<title>标准速查 · 碳核算</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  body{padding-bottom:26px}
+  .hd{display:flex;align-items:center;gap:10px;padding:16px 14px 6px}
+  .hd a{width:44px;height:44px;flex:0 0 44px;border-radius:12px;background:var(--pri-soft);
+        color:var(--pri);display:flex;align-items:center;justify-content:center;font-size:20px;
+        text-decoration:none;font-weight:700}
+  .hd .tt{font-size:calc(var(--fs) + 3px);font-weight:800;line-height:1.2}
+  .hd .ts{font-size:calc(var(--fs) - 3px);color:var(--tx2);margin-top:2px;line-height:1.5}
+  .seg{display:flex;gap:4px;margin:10px 12px 12px;background:var(--pri-soft);padding:4px;border-radius:14px}
+  .seg button{flex:1;border:0;background:transparent;color:var(--pri);font:inherit;
+              font-size:calc(var(--fs) - 1px);font-weight:700;padding:10px 0;border-radius:11px;cursor:pointer}
+  .seg button.on{background:var(--card);box-shadow:var(--shadow)}
+  .note{margin:0 12px 12px;padding:12px 14px;border-radius:14px;background:var(--warn-soft,#fdf3e0);
+        font-size:calc(var(--fs) - 2px);line-height:1.65;color:#8a5a12}
+  .grp{margin:14px 12px 6px;font-size:calc(var(--fs) - 2px);font-weight:800;color:var(--tx2);letter-spacing:.5px}
+  .st{margin:0 12px 10px;padding:13px 14px;border-radius:14px;background:var(--card);box-shadow:var(--shadow);cursor:pointer}
+  .st .top{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .st .code{font-size:calc(var(--fs) + 1px);font-weight:800;color:var(--pri)}
+  .st .lv{font-size:11px;font-weight:800;padding:2px 7px;border-radius:6px;background:var(--pri-soft);color:var(--pri)}
+  .st .lv.b{background:#eef2ff;color:#4338ca}
+  .st .lv.c{background:var(--bg);color:var(--tx2)}
+  .st .nm{margin-top:5px;font-size:calc(var(--fs) - 1px);font-weight:700;line-height:1.5}
+  .st .nat{margin-top:6px;font-size:calc(var(--fs) - 2px);color:var(--tx2);line-height:1.65}
+  .st .body{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+  .st.open .body{display:block}
+  .st .body dl{margin:0}
+  .st .body dt{font-size:calc(var(--fs) - 3px);font-weight:800;color:var(--tx2);margin-top:9px}
+  .st .body dd{margin:4px 0 0;font-size:calc(var(--fs) - 1px);line-height:1.75}
+  .st .body ul{margin:4px 0 0;padding-left:18px;font-size:calc(var(--fs) - 1px);line-height:1.75}
+  .st .body li{margin:3px 0}
+  .st .body .qn{margin-top:9px;font-size:calc(var(--fs) - 3px);color:var(--tx2);line-height:1.6}
+  .st .mark{margin-top:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--tx2);
+            font:inherit;font-size:calc(var(--fs) - 2px);font-weight:700;padding:8px 12px;border-radius:9px;
+            cursor:pointer;min-height:38px}
+  .st.done{border-left:4px solid var(--ok)}
+  .st.done .mark{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+  .cheap{margin:0 12px 10px;padding:12px 14px;border-radius:14px;background:var(--card);box-shadow:var(--shadow)}
+  .cheap .row{display:flex;gap:8px;padding:7px 0;border-bottom:1px dashed var(--line);font-size:calc(var(--fs) - 1px)}
+  .cheap .row:last-child{border:0}
+  .cheap .row b{flex:0 0 96px;color:var(--pri)}
+  .cheap .row span{color:var(--tx2);line-height:1.5}
+  .bar{height:7px;border-radius:4px;background:var(--line);overflow:hidden;margin:0 12px 12px}
+  .bar i{display:block;height:100%;background:var(--pri);width:0;transition:width .2s}
+  .qhead{margin:0 12px 10px;padding:12px 14px;border-radius:14px;background:var(--pri-soft);color:var(--pri)}
+  .qhead .qn{font-size:calc(var(--fs) - 2px);font-weight:700;opacity:.9}
+  .qhead .ask{font-size:calc(var(--fs) + 1px);font-weight:800;line-height:1.55;margin-top:4px}
+  .opts{display:flex;flex-direction:column;gap:8px;margin:0 12px 12px}
+  .opt{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);
+       background:var(--card);font-size:calc(var(--fs) - 1px);cursor:pointer;line-height:1.5;text-align:left;
+       font-family:inherit;color:var(--tx)}
+  .opt .bx{flex:0 0 24px;height:24px;border-radius:8px;border:1.5px solid var(--line);display:flex;
+           align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:13px;margin-top:1px}
+  .opt.ok{border-color:var(--ok);background:var(--ok-soft)}
+  .opt.ok .bx{background:var(--ok);border-color:var(--ok)}
+  .opt.bad{border-color:var(--bad);background:var(--bad-soft)}
+  .opt.bad .bx{background:var(--bad);border-color:var(--bad)}
+  .opt:disabled{cursor:default}
+  .why{margin:0 12px 12px;padding:13px 14px;border-radius:14px;background:var(--ok-soft);
+       border-left:4px solid var(--ok);font-size:calc(var(--fs) - 1px);line-height:1.7}
+  .why.bad{background:var(--bad-soft);border-left-color:var(--bad)}
+  .btns{display:flex;gap:8px;margin:0 12px 12px}
+  .btns .btn{flex:1;padding:12px 0;font-size:calc(var(--fs) - 1px);min-height:46px}
+  .empty{margin:0 12px 12px;padding:16px;border-radius:14px;background:var(--card);box-shadow:var(--shadow);
+         text-align:center;color:var(--tx2);font-size:calc(var(--fs) - 1px);line-height:1.7}
+  /* 全局 .opt b 是给选项字母 A/B/C/D 做的圆角徽章；本页选项里的 <b> 是标准编号，必须复位 */
+  .opt span b,
+  .opt.ok span b,
+  .opt.bad span b{display:inline;flex:none;width:auto;height:auto;line-height:1.45;text-align:left;
+                   border-radius:0;background:none;color:var(--pri);font-size:inherit;font-weight:800;margin:0}
+  .opt.ok span b{color:var(--ok)}
+  .opt.bad span b{color:var(--bad)}
+</style>
+</head>
+<body>
+<header class="hd">
+  <a href="index.html" aria-label="返回">‹</a>
+  <div>
+    <div class="tt">标准速查</div>
+    <div class="ts">会考的就这 10 个 · 正面背要点，反面练认号</div>
+  </div>
+</header>
+
+<div class="seg" id="seg">
+  <button data-tab="cards" class="on">卡片</button>
+  <button data-tab="quiz">反向题</button>
+</div>
+
+<div id="pane"></div>
+
+<script src="biaozhun.js"></script>
+</body>
+</html>

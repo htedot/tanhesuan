@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-font="md">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<title>拆题教练 · 碳核算</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  body{padding-bottom:26px}
+  .hd{display:flex;align-items:center;gap:10px;padding:16px 14px 6px}
+  .hd a{width:44px;height:44px;flex:0 0 44px;border-radius:12px;background:var(--pri-soft);
+        color:var(--pri);display:flex;align-items:center;justify-content:center;font-size:20px;
+        text-decoration:none;font-weight:700}
+  .hd .tt{font-size:calc(var(--fs) + 3px);font-weight:800;line-height:1.2}
+  .hd .ts{font-size:calc(var(--fs) - 3px);color:var(--tx2);margin-top:2px;line-height:1.5}
+  .seg{display:flex;gap:4px;margin:10px 12px 12px;background:var(--pri-soft);padding:4px;border-radius:14px}
+  .seg button{flex:1;border:0;background:transparent;color:var(--pri);font:inherit;
+              font-size:calc(var(--fs) - 1px);font-weight:700;padding:10px 0;border-radius:11px;cursor:pointer}
+  .seg button.on{background:var(--card);box-shadow:var(--shadow)}
+  .cardx{margin:0 12px 12px;padding:14px;border-radius:14px;background:var(--card);box-shadow:var(--shadow)}
+  .cardx h2{margin:0 0 8px;font-size:calc(var(--fs) + 1px)}
+  .cardx p{margin:0;color:var(--tx2);font-size:calc(var(--fs) - 2px);line-height:1.7}
+  .qhead{margin:0 12px 10px;padding:12px 14px;border-radius:14px;background:var(--pri-soft);color:var(--pri)}
+  .qhead .qn{font-size:calc(var(--fs) - 2px);font-weight:700;opacity:.9}
+  .qhead .ask{font-size:calc(var(--fs) + 1px);font-weight:800;line-height:1.55;margin-top:4px}
+  .qtip{margin:0 12px 10px;font-size:calc(var(--fs) - 2px);color:var(--tx2);line-height:1.6}
+  .opts{display:flex;flex-direction:column;gap:8px;margin:0 12px 12px}
+  .opt{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);
+       background:var(--card);font-size:calc(var(--fs) - 1px);cursor:pointer;line-height:1.5;text-align:left;font-family:inherit;color:var(--tx)}
+  .opt .bx{flex:0 0 24px;height:24px;border-radius:8px;border:1.5px solid var(--line);display:flex;
+           align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:13px;margin-top:1px}
+  .opt.ok{border-color:var(--ok);background:var(--ok-soft)}
+  .opt.ok .bx{background:var(--ok);border-color:var(--ok)}
+  .opt.bad{border-color:var(--bad);background:var(--bad-soft)}
+  .opt.bad .bx{background:var(--bad);border-color:var(--bad)}
+  .opt:disabled{cursor:default}
+  .trans{margin:0 12px 12px;padding:13px 14px;border-radius:14px;background:var(--ok-soft);
+         border-left:4px solid var(--ok);font-size:calc(var(--fs) - 1px);line-height:1.7}
+  .trans b{color:var(--ok)}
+  .slots{margin:0 12px 12px}
+  .slot{padding:11px 13px;border-radius:12px;background:var(--card);box-shadow:var(--shadow);margin-bottom:8px}
+  .slot .sl{font-size:calc(var(--fs) - 1px);font-weight:700;line-height:1.5;display:flex;gap:8px;align-items:flex-start}
+  .slot .n{flex:0 0 22px;height:22px;border-radius:50%;background:var(--pri-soft);color:var(--pri);
+           font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:800}
+  .slot.ok{border-left:4px solid var(--ok)}
+  .slot.bad{border-left:4px solid var(--bad)}
+  .slot .res{margin-left:auto;font-weight:800;color:var(--ok)}
+  .slot.bad .res{color:var(--bad)}
+  .slot .si{display:block;width:100%;margin-top:8px;padding:11px 12px;border-radius:10px;
+            border:1.5px solid var(--line);background:var(--bg);color:var(--tx);
+            font:inherit;font-size:calc(var(--fs) - 1px)}
+  .slot .si:focus{outline:none;border-color:var(--pri)}
+  .slot.ok .si{border-color:var(--ok);background:var(--ok-soft)}
+  .slot.bad .si{border-color:var(--bad);background:var(--bad-soft)}
+  .slot .hb{margin-top:8px;border:0;background:var(--pri-soft);color:var(--pri);font:inherit;font-size:calc(var(--fs) - 3px);
+            font-weight:700;padding:8px 12px;border-radius:9px;cursor:pointer;min-height:38px}
+  .slot .hh{display:none;margin-top:8px;font-size:calc(var(--fs) - 2px);color:var(--tx2);line-height:1.65;
+            padding:9px 11px;background:var(--bg);border-radius:9px}
+  .slot.shown .hh{display:block}
+  textarea{display:block;width:calc(100% - 24px);margin:0 12px 12px;min-height:120px;padding:12px 14px;
+           border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--tx);
+           font:inherit;font-size:calc(var(--fs) - 1px);line-height:1.7;resize:vertical}
+  textarea:focus{outline:none;border-color:var(--pri)}
+  .btns{display:flex;gap:8px;margin:0 12px 12px}
+  .btns .btn{flex:1;padding:12px 0;font-size:calc(var(--fs) - 1px);min-height:46px}
+  .ans{margin:0 12px 12px;padding:13px 14px;border-radius:14px;background:var(--card);box-shadow:var(--shadow)}
+  .ans h3{margin:0 0 8px;font-size:calc(var(--fs) - 1px);color:var(--pri)}
+  .ans .mdl{font-size:calc(var(--fs) - 1px);line-height:1.8;white-space:pre-wrap}
+  .ans .tr{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+  .ans .tr li{font-size:calc(var(--fs) - 2px);color:var(--bad);line-height:1.7}
+  .typecard{margin:0 12px 10px;padding:13px 14px;border-radius:14px;background:var(--card);box-shadow:var(--shadow)}
+  .typecard .tn{font-size:calc(var(--fs) + 1px);font-weight:800;color:var(--pri)}
+  .typecard .tc{margin-top:6px;font-size:calc(var(--fs) - 2px);color:var(--tx2);line-height:1.6}
+  .typecard .tf{margin-top:8px;padding:10px 12px;background:var(--bg);border-radius:9px;
+                font-size:calc(var(--fs) - 2px);line-height:1.75;word-break:break-word}
+  .typecard .tp{margin-top:8px;font-size:calc(var(--fs) - 3px);color:var(--ok)}
+  .item{display:flex;gap:10px;align-items:center;padding:12px 14px;border-top:1px solid var(--line);cursor:pointer;
+        font-size:calc(var(--fs) - 1px);line-height:1.5;background:none;border-left:0;border-right:0;border-bottom:0;
+        width:100%;text-align:left;font-family:inherit;color:var(--tx);min-height:52px}
+  .item:first-of-type{border-top:0}
+  .item .no{flex:0 0 30px;height:30px;border-radius:9px;background:var(--pri-soft);color:var(--pri);
+            display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+  .item.done .no{background:var(--ok-soft);color:var(--ok)}
+  .item .tx{flex:1;min-width:0}
+  .item .go{color:var(--tx2);font-size:16px}
+  #foot{text-align:center;color:var(--tx2);font-size:calc(var(--fs) - 4px);padding:10px}
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:99;max-width:82vw;
+         padding:11px 16px;border-radius:12px;background:rgba(20,28,30,.92);color:#fff;
+         font-size:calc(var(--fs) - 2px);line-height:1.5;text-align:center}
+  .bzlnk{margin:2px 12px 8px;padding:11px 14px;border-radius:12px;background:var(--card);box-shadow:var(--shadow);
+         font-size:calc(var(--fs) - 3px);color:var(--tx2);line-height:1.55;text-decoration:none;display:block}
+  .bzlnk b{color:var(--pri);font-size:calc(var(--fs) - 1px)}
+</style>
+</head>
+<body>
+<div class="hd">
+  <a href="index.html" aria-label="返回">‹</a>
+  <div>
+    <div class="tt">拆题教练</div>
+    <div class="ts">先看懂题在问什么，再照着骨架写</div>
+  </div>
+</div>
+<a class="bzlnk" href="biaozhun.html"><b>标准速查 ›</b><br>会考的就 10 个：正面背要点，反面练认号</a>
+    <a class="bzlnk" href="beisong.html?v=SC"><b>去背实操必背 ›</b><br>除计算外的 7 题 80 分：正面问法，背面能直接抄上卷面</a>
+<div class="seg" id="seg">
+  <button data-p="list" class="on">题库</button>
+  <button data-p="quick">问法速查</button>
+</div>
+<main id="pane"></main>
+<div id="foot">题干与参考答案来自官方技能操作样题 · 翻译与骨架为训练用</div>
+<div id="toast" class="toast" hidden></div>
+<script src="chai.js"></script>
+</body>
+</html>
