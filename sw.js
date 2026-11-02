@@ -1,10 +1,10 @@
 /* 碳核算刷题 Service Worker — 离线可用 */
-const CACHE = 'ths-e1bb2b2e';
+const CACHE = 'ths-c66cd9c0';
 const ASSETS = ['./', './index.html', './styles.css', './app.js', './manifest.webmanifest',
   './data/questions.json', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-180.png',
   './exam.html', './exam.js', './exam_core.js', './kaoshi.html', './kaoshi.js', './kaoshi_calc.js', './chai.html', './chai.js', './data/chai.json', './data/exam.json', './ziliao.html', './ziliao.js', './data/ziliao.json',
   './beisong.html', './beisong.js', './data/beisong.json', './data/beisong_sc.json',
-  './biaozhun.html', './biaozhun.js', './data/biaozhun.json'];
+  './biaozhun.html', './biaozhun.js', './data/biaozhun.json', './lianxian.html', './lianxian.js', './data/lianxian.json'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));

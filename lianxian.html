@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f6b5c">
+<title>标准连线 · 碳核算刷题</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .hd{display:flex;align-items:center;gap:10px;padding:10px 14px 6px}
+  .hd .back{width:44px;height:44px;flex:0 0 44px;display:flex;align-items:center;justify-content:center;
+            border-radius:50%;background:var(--pri-soft);color:var(--pri);text-decoration:none;font-size:22px}
+  .hd .tt{flex:1;min-width:0}
+  .hd .tt b{display:block;font-size:calc(var(--fs) + 3px)}
+  .hd .tt span{display:block;font-size:calc(var(--fs) - 5px);color:var(--tx2);margin-top:2px}
+  .clock{font-variant-numeric:tabular-nums;font-weight:800;font-size:calc(var(--fs) + 1px);color:var(--pri)}
+
+  .bar2{display:flex;gap:10px;padding:6px 14px 10px;flex-wrap:wrap}
+  .bar2 .kv{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 12px;
+            font-size:calc(var(--fs) - 4px);color:var(--tx2)}
+  .bar2 .kv b{color:var(--tx);font-size:calc(var(--fs) - 1px);margin-left:4px}
+
+  .wrap{padding:0 14px 26px}
+  .tip{background:var(--pri-soft);color:var(--pri);border-radius:12px;padding:9px 12px;
+       font-size:calc(var(--fs) - 4px);line-height:1.6;margin-bottom:12px}
+  .cols{display:flex;gap:10px;align-items:flex-start}
+  .col{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+  .cell{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px;
+        font-size:calc(var(--fs) - 3px);line-height:1.45;cursor:pointer;overflow-wrap:anywhere;
+        transition:border-color .12s,background .12s,opacity .12s}
+  .cell.k{font-weight:800;color:var(--pri);letter-spacing:.2px}
+  .cell.sel{border-color:var(--pri);background:var(--pri-soft)}
+  .cell.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);opacity:.75}
+  .cell.bad{border-color:var(--bad);background:var(--bad-soft);animation:shake .3s}
+  .cell.used{pointer-events:none}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+
+  .fb{margin-top:12px;border-radius:12px;padding:10px 12px;font-size:calc(var(--fs) - 4px);line-height:1.65;
+      display:none}
+  .fb.show{display:block}
+  .fb.good{background:var(--ok-soft);color:var(--ok)}
+  .fb.err{background:var(--bad-soft);color:var(--bad)}
+
+  .foot2{padding:0 14px 30px}
+  .foot2 .btn{width:100%}
+  .muted2{font-size:calc(var(--fs) - 5px);color:var(--tx2);text-align:center;margin-top:10px;line-height:1.7}
+  .done{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:center}
+  .done .big{font-size:calc(var(--fs) + 16px);font-weight:800;color:var(--pri);font-variant-numeric:tabular-nums}
+  .done .sub{font-size:calc(var(--fs) - 4px);color:var(--tx2);margin-top:4px}
+  .miss{margin-top:12px;text-align:left}
+  .miss b{display:block;font-size:calc(var(--fs) - 3px);margin-bottom:6px}
+  .miss span{display:inline-block;margin:0 6px 6px 0;padding:3px 9px;border-radius:99px;
+             background:var(--bad-soft);color:var(--bad);font-size:calc(var(--fs) - 5px);font-weight:700}
+</style>
+</head>
+<body>
+<header class="hd">
+  <a class="back" href="biaozhun.html" title="返回">‹</a>
+  <div class="tt"><b>标准连线</b><span id="sub">左侧编号 ↔ 右侧标准名称</span></div>
+  <div class="clock" id="clk">00:00</div>
+</header>
+
+<div class="bar2">
+  <div class="kv">第<b id="rnd">1 / 1</b>轮</div>
+  <div class="kv">已连对<b id="hit">0 / 0</b></div>
+  <div class="kv">错<b id="miss">0</b>次</div>
+</div>
+
+<div class="wrap">
+  <div class="tip">点左边一个编号，再点右边对应的名称。配对正确会变绿并显示它管什么；错了可以再试。</div>
+  <div id="board"></div>
+  <div class="fb" id="fb"></div>
+</div>
+
+<div class="foot2" id="foot"></div>
+
+<script src="lianxian.js"></script>
+</body>
+</html>
