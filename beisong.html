@@ -55,6 +55,36 @@
   .opts .seg button.on{border-color:var(--pri);color:var(--pri);background:var(--pri-soft)}
   .done{margin:20px 14px;text-align:center;color:var(--tx2);line-height:1.9;font-size:calc(var(--fs) - 1px)}
   .done .big{font-size:34px;font-weight:800;color:var(--ok);display:block;margin-bottom:6px}
+  /* ---- 总览 ---- */
+  .hd a.ovlnk{margin-left:auto;flex:0 0 auto;width:auto;height:auto;min-height:0;padding:8px 14px;
+                border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--pri);
+                font-weight:700;font-size:calc(var(--fs) - 3px);text-decoration:none;white-space:nowrap;
+                display:inline-flex;align-items:center}
+  .ov{padding:6px 14px 28px}
+  .ov h3{margin:20px 0 8px;font-size:calc(var(--fs) - 1px);color:var(--tx2);font-weight:700}
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 8px;text-align:center}
+  .kpi b{display:block;font-size:25px;line-height:1.15;font-variant-numeric:tabular-nums}
+  .kpi span{font-size:calc(var(--fs) - 4px);color:var(--tx2)}
+  .kpi.on b{color:var(--ok)} .kpi.mid b{color:var(--pri)} .kpi.warn b{color:var(--bad)}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px 13px}
+  .vrow{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px dashed var(--line)}
+  .vrow:last-child{border-bottom:0}
+  .vrow .nm{flex:0 0 5.6em;font-weight:700;font-size:calc(var(--fs) - 2px)}
+  .vrow .bb{flex:1;height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+  .vrow .bb i{display:block;height:100%;background:var(--pri);border-radius:99px;transition:width .3s}
+  .vrow .pc{flex:0 0 5.2em;text-align:right;font-size:calc(var(--fs) - 4px);color:var(--tx2);
+            font-variant-numeric:tabular-nums}
+  .vrow.cur .nm{color:var(--pri)}
+  .due{display:flex;gap:7px;align-items:flex-end;height:84px;padding:10px 2px 0}
+  .due .d{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px;
+          font-size:10px;color:var(--tx2);height:100%}
+  .due .d i{display:block;width:100%;background:var(--pri-soft);border-radius:6px 6px 0 0;min-height:3px}
+  .due .d i.on{background:var(--pri)}
+  .due .d b{font-size:11px;color:var(--tx);font-weight:700;font-variant-numeric:tabular-nums}
+  .plan{margin-top:8px;font-size:calc(var(--fs) - 3px);line-height:1.75;color:var(--tx2)}
+  .plan b{color:var(--tx)}
+  .ovmode .opts{display:none}
   #tts{display:none}
   .card.open ~ .acts #tts{display:block}
   .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:99;
@@ -69,6 +99,7 @@
     <div class="tt">背诵</div>
     <div class="ts" id="sub">正在加载…</div>
   </div>
+  <a href="#" class="ovlnk" data-a="ov">总览</a>
 </div>
 
 <div class="bar"><i id="prog"></i></div>
