@@ -6,6 +6,8 @@
   var INTERVALS = [0, 1, 3, 7, 15, 30, 60];   // box → 间隔天数
   var MAXBOX = 6;
 var ovOpen = false;   // 当前是否停在总览页
+var listOpen = false; // 当前是否停在「全部卡片」清单
+var lf = { vol: 'all', q: '', only: 'all' };   // 清单页筛选：卷 / 搜索词 / 只看
 const EXAM_DAY = '2026-11-07';   // 决赛日，用来算还剩几天
 
   var DATA = { cards: [], meta: {} };
@@ -158,7 +160,9 @@ const EXAM_DAY = '2026-11-07';   // 决赛日，用来算还剩几天
 
     $('#pane').innerHTML = head + acts + grade;
     ovOpen = false;
+    listOpen = false;
     document.body.classList.remove('ovmode');
+    document.body.classList.remove('listmode');
     shown = false;
     renderStats();
   }
@@ -321,6 +325,7 @@ const EXAM_DAY = '2026-11-07';   // 决赛日，用来算还剩几天
     // 行动
     h += '<div style="margin-top:18px"><button class="btn" data-a="start" style="min-height:48px;font-size:calc(var(--fs) + 1px)">' +
       (qn ? '开始背（队列 ' + qn + ' 张）' : '再背一轮') + '</button></div>';
+    h += '<div style="margin-top:10px"><button class="btn ghost" data-a="list">浏览全部卡片（含答案）</button></div>';
     h += '<div class="plan" style="text-align:center">随时点右上角「总览」回来看这里</div>';
     h += '</div>';
 
@@ -328,6 +333,97 @@ const EXAM_DAY = '2026-11-07';   // 决赛日，用来算还剩几天
     ovOpen = true;
     document.body.classList.add('ovmode');
     renderStats();
+  }
+
+  /* ---------- 全部卡片清单 ---------- */
+  function cardMood(id) {
+    var cs = cardState(id);
+    if (!cs) return { t: '没背过', c: '' };
+    var b = cs.b || 0;
+    if (b >= 3) return { t: '已掌握', c: 'ok' };
+    return { t: '在学 · 档' + b, c: 'mid' };
+  }
+
+  function lmatch(c) {
+    if (lf.vol !== 'all' && c.v !== lf.vol) return false;
+    if (lf.only === 'new' && cardState(c.id)) return false;
+    if (lf.only === 'hard') {
+      var cs = cardState(c.id);
+      if (cs && (cs.b || 0) >= 3) return false;
+    }
+    if (lf.q) {
+      var q = lf.q.toLowerCase();
+      var hay = (c.front + ' ' + c.back + ' ' + (c.tag || '') + ' ' + (c.vt || '')).toLowerCase();
+      if (hay.indexOf(q) < 0) return false;
+    }
+    return true;
+  }
+
+  function renderList() {
+    var seen = {}, order = OV_ORDER.slice();
+    DATA.cards.forEach(function (c) { seen[c.v] = 1; });
+    var vols = order.filter(function (v) { return seen[v]; });
+    Object.keys(seen).forEach(function (v) { if (vols.indexOf(v) < 0) vols.push(v); });
+
+    var shown = DATA.cards.filter(lmatch);
+    var h = '<div class="lst">';
+
+    h += '<div class="lstbar"><input id="lq" type="search" placeholder="搜正面或答案里的字…" value="' +
+      esc(lf.q) + '"><button data-a="lexp">展开全部</button></div>';
+
+    h += '<div class="lchips">';
+    h += '<button data-lv="all"' + (lf.vol === 'all' ? ' class="on"' : '') + '>全部卷</button>';
+    vols.forEach(function (v) {
+      h += '<button data-lv="' + v + '"' + (lf.vol === v ? ' class="on"' : '') + '>' + esc(volName(v)) + '</button>';
+    });
+    h += '</div>';
+
+    h += '<div class="lchips">';
+    h += '<button data-lo="all"' + (lf.only === 'all' ? ' class="on"' : '') + '>全部</button>';
+    h += '<button data-lo="new"' + (lf.only === 'new' ? ' class="on"' : '') + '>只看没背过的</button>';
+    h += '<button data-lo="hard"' + (lf.only === 'hard' ? ' class="on"' : '') + '>只看没掌握的</button>';
+    h += '</div>';
+
+    h += '<div class="lmeta">共 <b>' + DATA.cards.length + '</b> 张，当前显示 <b>' + shown.length + '</b> 张 · 点卡片展开答案</div>';
+
+    vols.forEach(function (v) {
+      var arr = shown.filter(function (c) { return c.v === v; });
+      if (!arr.length) return;
+      h += '<div class="lgrp">' + esc(volName(v)) + '<span>' + arr.length + ' 张</span></div>';
+      arr.forEach(function (c) {
+        var m = cardMood(c.id);
+        h += '<div class="lc" data-lc="' + esc(c.id) + '">' +
+          '<div class="lq">' + fmtFront(c.front) + '</div>' +
+          '<div class="la">' + esc(c.back) + '</div>' +
+          '<div class="lt"><em class="' + m.c + '">' + m.t + '</em>' +
+          '<em>' + esc(c.tag || c.kind) + '</em>' +
+          '<span class="hint">' + esc(c.vt) + ' · 第 ' + (c.bi + 1) + ' 段</span></div>' +
+          '</div>';
+      });
+    });
+
+    if (!shown.length) {
+      h += '<div class="lmeta" style="margin-top:24px;text-align:center">没有符合条件的卡，换个词或切回「全部」。</div>';
+    }
+
+    h += '<div style="margin-top:18px"><button class="btn" data-a="start" style="min-height:46px">开始背（队列 ' +
+      buildQueue().length + ' 张）</button></div>';
+    h += '</div>';
+
+    $('#pane').innerHTML = h;
+    listOpen = true;
+    ovOpen = false;
+    document.body.classList.add('listmode');
+    document.body.classList.remove('ovmode');
+    renderStats();
+  }
+
+  function toggleAllCards() {
+    var cards = $$('.lc');
+    var anyClosed = cards.some(function (c) { return !c.classList.contains('open'); });
+    cards.forEach(function (c) { c.classList.toggle('open', anyClosed); });
+    var b = $('[data-a="lexp"]');
+    if (b) b.textContent = anyClosed ? '收起全部' : '展开全部';
   }
 
   function renderDone() {
@@ -415,10 +511,15 @@ const EXAM_DAY = '2026-11-07';   // 决赛日，用来算还剩几天
   /* ---------- 交互 ---------- */
   function bind() {
     document.addEventListener('click', function (e) {
-      var t = e.target.closest ? e.target.closest('[data-a],[data-g],[data-goal],[data-mode],[data-vol]') : null;
+      var t = e.target.closest ? e.target.closest('[data-a],[data-g],[data-goal],[data-mode],[data-vol],[data-lc],[data-lv],[data-lo]') : null;
       if (!t) return;
       if (t.dataset.a === 'ov') { if (e.preventDefault) e.preventDefault(); return renderOverview(); }
+    if (t.dataset.a === 'list') { return renderList(); }
+    if (t.dataset.a === 'lexp') { return toggleAllCards(); }
     if (t.dataset.a === 'start') { return startStudy(); }
+    if (t.dataset.lc) { t.classList.toggle('open'); return; }
+    if (t.dataset.lv) { lf.vol = t.dataset.lv; return renderList(); }
+    if (t.dataset.lo) { lf.only = t.dataset.lo; return renderList(); }
     if (t.dataset.a === 'reveal') return reveal();
       if (t.dataset.a === 'tts') return speak();
       if (t.dataset.a === 'again') { queue = buildQueue(); todayTotal = queue.length; todayDone = 0; return next(); }
@@ -494,6 +595,23 @@ const EXAM_DAY = '2026-11-07';   // 决赛日，用来算还剩几天
   }
 
   /* ---------- 启动 ---------- */
+  function bindSearch() {
+    var pane = $('#pane');
+    pane.addEventListener('input', function (e) {
+      var t = e.target;
+      if (t && t.id === 'lq') {
+        lf.q = t.value.trim();
+        var pos = t.selectionStart, val = t.value;
+        renderList();
+        var again = $('#lq');
+        if (again) { again.focus(); try { again.setSelectionRange(pos, pos); } catch (e2) {} }
+      }
+    });
+    pane.addEventListener('keydown', function (e) {
+      if (e.target && e.target.id === 'lq' && e.key === 'Enter') e.preventDefault();
+    });
+  }
+
   function volChips() {
     var seen = {};
     DATA.cards.forEach(function (c) { seen[c.v] = 1; });
@@ -548,6 +666,7 @@ const EXAM_DAY = '2026-11-07';   // 决赛日，用来算还剩几天
       todayTotal = queue.length;
       todayDone = 0;
       bind();
+      bindSearch();
       next();
     }).catch(function (e) {
       $('#pane').innerHTML = '<div class="done">卡片加载失败：' + esc(e.message) +

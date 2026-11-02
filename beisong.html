@@ -55,6 +55,34 @@
   .opts .seg button.on{border-color:var(--pri);color:var(--pri);background:var(--pri-soft)}
   .done{margin:20px 14px;text-align:center;color:var(--tx2);line-height:1.9;font-size:calc(var(--fs) - 1px)}
   .done .big{font-size:34px;font-weight:800;color:var(--ok);display:block;margin-bottom:6px}
+  /* ---- 全部卡片清单 ---- */
+  .listmode .opts{display:none}
+  .lst{padding:4px 14px 30px}
+  .lstbar{display:flex;gap:8px;align-items:center;margin:8px 0 10px}
+  .lstbar input{flex:1;min-width:0;font:inherit;font-size:calc(var(--fs) - 2px);padding:10px 12px;
+                border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--tx)}
+  .lstbar button{font:inherit;font-size:calc(var(--fs) - 3px);font-weight:700;padding:10px 12px;
+                 border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--pri);white-space:nowrap}
+  .lchips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+  .lchips button{font:inherit;font-size:calc(var(--fs) - 3px);font-weight:700;padding:6px 10px;
+                 border:1.5px solid var(--line);border-radius:99px;background:var(--card);color:var(--tx2)}
+  .lchips button.on{border-color:var(--pri);color:var(--pri);background:var(--pri-soft)}
+  .lmeta{font-size:calc(var(--fs) - 4px);color:var(--tx2);margin:2px 0 10px}
+  .lgrp{display:flex;justify-content:space-between;align-items:center;margin:16px 0 8px;padding-bottom:6px;
+        border-bottom:2px solid var(--pri-soft);font-weight:800;font-size:calc(var(--fs) - 1px);color:var(--pri)}
+  .lgrp span{font-weight:600;font-size:calc(var(--fs) - 4px);color:var(--tx2)}
+  .lc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px;
+      cursor:pointer}
+  .lc .lq{font-size:calc(var(--fs) - 1px);line-height:1.6;font-weight:700}
+  .lc .la{display:none;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);
+          white-space:pre-wrap;overflow-wrap:anywhere;font-size:calc(var(--fs) - 2px);line-height:1.75;color:var(--ok)}
+  .lc.open .la{display:block}
+  .lc .lt{display:flex;gap:8px;flex-wrap:wrap;margin-top:7px;font-size:calc(var(--fs) - 5px);color:var(--tx2)}
+  .lc .lt em{font-style:normal;padding:1px 7px;border-radius:99px;background:var(--bg)}
+  .lc .lt em.ok{background:var(--ok-soft);color:var(--ok)}
+  .lc .lt em.mid{background:var(--pri-soft);color:var(--pri)}
+  .lc .hint{font-size:calc(var(--fs) - 5px);color:var(--tx2)}
+
   /* ---- 总览 ---- */
   .hd a.ovlnk{margin-left:auto;flex:0 0 auto;width:auto;height:auto;min-height:0;padding:8px 14px;
                 border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--pri);
