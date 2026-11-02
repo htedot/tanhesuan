@@ -256,6 +256,9 @@
     });
     h += '</div>';
 
+    // 学习模式：对账后整题的官方参考答案（一题只出一次）
+    if (!isExam && ST.checked[q.id]) h += '<div class="ofwrap">' + officialHTML(q) + '</div>';
+
     h += '<div class="foot">' +
       '<button class="go" data-a="prev"' + (ST.q === 0 ? ' disabled' : '') + '>上一题</button>' +
       (isExam
@@ -296,6 +299,25 @@
     });
     h += '</tbody></table>';
     if (d.note) h += '<div class="dnote">' + esc(d.note) + '</div>';
+    return h;
+  }
+
+  // 官方参考答案（附件 3 原文）
+  function officialHTML(q) {
+    var o = q.official;
+    if (!o || !o.subs || !o.subs.length) return '';
+    var h = '<div class="ofbox"><div class="ofhd">官方参考答案<span>原文，附件 3</span></div>';
+    o.subs.forEach(function (s) {
+      if (s.n || s.pt) {
+        h += '<div class="ofn">' + esc(s.n || '') +
+             (s.pt ? ' <span class="badge">' + s.pt + ' 分</span>' : '') + '</div>';
+      }
+      if (s.constraint) h += '<div class="ofc">评分约束：' + esc(s.constraint) + '</div>';
+      (s.answer || []).forEach(function (a) {
+        h += '<div class="ofa">' + esc(a) + '</div>';
+      });
+    });
+    h += '</div>';
     return h;
   }
 
@@ -349,6 +371,8 @@
         studyBump(D.qs[ST.q].id, empty);
         persist();
         go('study');
+        var of = $('.ofbox');
+        if (of) setTimeout(function () { of.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 60);
       }
       else if (a === 'submit') { confirmSubmit(); }
       else if (a === 'calc') { $('#calc').classList.toggle('on'); }
@@ -565,7 +589,9 @@
     });
     h += '</div>';
 
-    h += '<div class="review"><h4>参考答案</h4><div class="model">' + esc(q.model) + '</div></div>';
+    h += '<div class="review"><h4>参考答案</h4>' + officialHTML(q) +
+         (q.model ? '<details class="mn"><summary>我的一句话记法</summary><div class="model">' + esc(q.model) + '</div></details>' : '') +
+         '</div>';
     h += '<div class="review"><h4>这题考什么</h4><div class="model">' + esc(q.point) + '</div>' +
          '<div class="tipbox"><b>常见丢分：</b>' + esc(q.loss) + '</div></div>';
     h += '<div style="padding:12px;display:flex;gap:8px">' +
