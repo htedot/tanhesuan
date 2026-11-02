@@ -1,5 +1,5 @@
 /* 碳核算刷题 Service Worker — 离线可用 */
-const CACHE = 'ths-c66cd9c0';
+const CACHE = 'ths-4b30e944';
 const ASSETS = ['./', './index.html', './styles.css', './app.js', './manifest.webmanifest',
   './data/questions.json', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-180.png',
   './exam.html', './exam.js', './exam_core.js', './kaoshi.html', './kaoshi.js', './kaoshi_calc.js', './chai.html', './chai.js', './data/chai.json', './data/exam.json', './ziliao.html', './ziliao.js', './data/ziliao.json',

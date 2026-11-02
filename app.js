@@ -739,7 +739,7 @@
 
     h += '<div class="card"><h2>关于</h2>' +
       '<div class="kv"><span>题库</span><span class="muted">1050 题（单选 315 / 双项 315 / 不定项 157 / 判断 263）</span></div>' +
-      '<div class="kv"><span>版本</span><span class="muted">v﻿1.7.4</span></div>' +
+      '<div class="kv"><span>版本</span><span class="muted">v1.7.4</span></div>' +
       '<div class="kv"><span>解析</span><span class="muted">考点与权威依据分批补充中</span></div>' +
       '<div class="muted" style="margin-top:10px;line-height:1.8">本 App 为个人备考自用工具，题库版权归原编制单位，请勿公开传播。</div>' +
       '</div>';
